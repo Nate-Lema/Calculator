@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      button {
+        background-color: orange;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        color: white;
+        font-size: x-large;
+        border: 1px solid black;
+      }
+      textarea {
+        width: 220px;
+        height: 50px;
+        color: white;
+        text-align: right;
+        font-size: xxx-large;
+        background-color: black;
+        border: 1px solid black;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+      }
+      .myClass {
+        background-color: rgb(199, 195, 195);
+        color: black;
+      }
+      .myClass2 {
+        background-color: rgb(56, 55, 55);
+        color: white;
+      }
+    </style>
+    <script>
+      function result() {
+        let myTextAreaValue = document.querySelector("textarea").value;
+        let lhs, rhs, op;
+        for (let i = 0; i < myTextAreaValue.length; i++) {
+          if (i == 0) {
+            lhs = parseInt(myTextAreaValue[0]);
+          } else if (
+            myTextAreaValue[i] == "+" ||
+            myTextAreaValue[i] == "-" ||
+            myTextAreaValue[i] == "x" ||
+            myTextAreaValue[i] == "÷" ||
+            myTextAreaValue[i] == "%" ||
+            myTextAreaValue[i] == "^"
+          ) {
+            op = myTextAreaValue[i];
+          } else {
+            rhs = parseInt(myTextAreaValue[i]);
+          }
+        }
+        let result;
+        if (op == "+") {
+          result = lhs + rhs;
+        } else if (op == "-") {
+          result = lhs - rhs;
+        } else if (op == "x") {
+          result = lhs * rhs;
+        } else if (op == "÷") {
+          result = lhs / rhs;
+        } else if (op == "%") {
+          result = lhs % rhs;
+        } else if (op == "^") {
+          result = lhs;
+          for (let count = 1; count < rhs; count++) {
+            result *= lhs;
+          }
+        }
+        document.querySelector("textarea").value = result;
+      }
+      function clears() {
+        let result = document.getElementById("textarea");
+        result.value = " ";
+      }
+      function inputText(num) {
+        let result = document.getElementById("textarea");
+        result.value = result.value + num;
+      }
+      function pi() {
+        let result = document.getElementById("textarea");
+        result.value = 3.14;
+      }
+      function point() {
+        let result = document.getElementById("textarea");
+        result.value = parseFloat(result.value) + ".";
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      style="
+        border: 1px solid;
+        width: 225px;
+        background-color: black;
+        border-radius: 10px;
+      "
+    >
+      <textarea name="myText" id="textarea" cols="22" rows="1"></textarea>
+      <div style="margin: 5px">
+        <button id="bu1" class="myClass" onclick="clears()">C</button>
+        <button id="bu2" class="myClass" onclick="inputText('%')">%</button>
+        <button id="bu3" class="myClass" onclick="pi('π')">π</button>
+
+        <button id="bu4" onclick="inputText('+')">+</button>
+        <button id="bu5" class="myClass2" onclick="inputText('9')">9</button>
+        <button id="bu6" class="myClass2" onclick="inputText('8')">8</button>
+        <button id="bu7" class="myClass2" onclick="inputText('7')">7</button>
+        <button id="bu8" onclick="inputText('-')">-</button>
+
+        <button id="bu9" class="myClass2" onclick="inputText('6')">6</button>
+        <button id="bu10" class="myClass2" onclick="inputText('5')">5</button>
+        <button id="bu11" class="myClass2" onclick="inputText('4')">4</button>
+        <button id="bu12" onclick="inputText('x')">x</button>
+
+        <button id="bu13" class="myClass2" onclick="inputText('3')">3</button>
+        <button id="bu14" class="myClass2" onclick="inputText('2')">2</button>
+        <button id="bu15" class="myClass2" onclick="inputText('1')">1</button>
+        <button id="bu16" onclick="inputText('÷')">÷</button>
+
+        <button id="bu17" class="myClass2" onclick="inputText('0')">0</button>
+        <button id="bu18" class="myClass2" onclick="inputText('^')">^</button>
+        <button id="bu19" class="myClass2" onclick="point()">.</button>
+        <button id="bu20" onclick="result()">=</button>
+      </div>
+    </div>
+  </body>
+</html>
