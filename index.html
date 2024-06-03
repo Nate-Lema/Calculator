@@ -3,130 +3,225 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Calculator</title>
     <style>
-      button {
-        background-color: orange;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        color: white;
-        font-size: x-large;
-        border: 1px solid black;
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
       }
-      textarea {
-        width: 220px;
+      .calculator {
+        border: 1px solid black;
+        border-radius: 10px;
+        background-color: black;
+        padding: 10px;
+        width: 260px;
+      }
+      .display {
+        width: 100%;
         height: 50px;
+        background-color: black;
         color: white;
         text-align: right;
-        font-size: xxx-large;
-        background-color: black;
-        border: 1px solid black;
-        border-top-right-radius: 10px;
+        font-size: 2rem;
+        border: none;
         border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: space-between;
+      }
+      button {
+        background-color: orange;
+        width: 60px;
+        height: 50px;
+        border-radius: 10px;
+        color: white;
+        font-size: 1.5rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      button:hover {
+        background-color: darkorange;
       }
       .myClass {
-        background-color: rgb(199, 195, 195);
+        background-color: #c7c3c3;
         color: black;
       }
       .myClass2 {
-        background-color: rgb(56, 55, 55);
+        background-color: #383737;
         color: white;
+      }
+      .theme-toggle {
+        margin-top: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+      }
+      .theme-toggle.light {
+        background-color: #ddd;
+        color: black;
       }
     </style>
     <script>
-      function result() {
-        let myTextAreaValue = document.querySelector("textarea").value;
-        let lhs, rhs, op;
-        for (let i = 0; i < myTextAreaValue.length; i++) {
-          if (i == 0) {
-            lhs = parseInt(myTextAreaValue[0]);
-          } else if (
-            myTextAreaValue[i] == "+" ||
-            myTextAreaValue[i] == "-" ||
-            myTextAreaValue[i] == "x" ||
-            myTextAreaValue[i] == "÷" ||
-            myTextAreaValue[i] == "%" ||
-            myTextAreaValue[i] == "^"
-          ) {
-            op = myTextAreaValue[i];
-          } else {
-            rhs = parseInt(myTextAreaValue[i]);
-          }
+      let memory = 0;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("keydown", handleKeyboardInput);
+      });
+
+      function appendToDisplay(value) {
+        const display = document.querySelector(".display");
+        display.value += value;
+      }
+
+      function clearDisplay() {
+        const display = document.querySelector(".display");
+        display.value = "";
+      }
+
+      function deleteLast() {
+        const display = document.querySelector(".display");
+        display.value = display.value.slice(0, -1);
+      }
+
+      function calculate() {
+        const display = document.querySelector(".display");
+        try {
+          display.value = eval(display.value.replace("÷", "/").replace("x", "*"));
+        } catch {
+          display.value = "Error";
         }
-        let result;
-        if (op == "+") {
-          result = lhs + rhs;
-        } else if (op == "-") {
-          result = lhs - rhs;
-        } else if (op == "x") {
-          result = lhs * rhs;
-        } else if (op == "÷") {
-          result = lhs / rhs;
-        } else if (op == "%") {
-          result = lhs % rhs;
-        } else if (op == "^") {
-          result = lhs;
-          for (let count = 1; count < rhs; count++) {
-            result *= lhs;
-          }
+      }
+
+      function insertPi() {
+        appendToDisplay(Math.PI.toFixed(2));
+      }
+
+      function insertPoint() {
+        const display = document.querySelector(".display");
+        if (!display.value.includes(".")) {
+          appendToDisplay(".");
         }
-        document.querySelector("textarea").value = result;
       }
-      function clears() {
-        let result = document.getElementById("textarea");
-        result.value = " ";
+
+      function memoryStore() {
+        const display = document.querySelector(".display");
+        memory = parseFloat(display.value);
       }
-      function inputText(num) {
-        let result = document.getElementById("textarea");
-        result.value = result.value + num;
+
+      function memoryRecall() {
+        const display = document.querySelector(".display");
+        display.value = memory;
       }
-      function pi() {
-        let result = document.getElementById("textarea");
-        result.value = 3.14;
+
+      function memoryClear() {
+        memory = 0;
       }
-      function point() {
-        let result = document.getElementById("textarea");
-        result.value = parseFloat(result.value) + ".";
+
+      function squareRoot() {
+        const display = document.querySelector(".display");
+        display.value = Math.sqrt(parseFloat(display.value));
+      }
+
+      function powerOfTwo() {
+        const display = document.querySelector(".display");
+        display.value = Math.pow(parseFloat(display.value), 2);
+      }
+
+      function toggleTheme() {
+        const calculator = document.querySelector(".calculator");
+        const display = document.querySelector(".display");
+        const buttons = document.querySelectorAll("button");
+        const themeToggle = document.querySelector(".theme-toggle");
+
+        if (calculator.classList.contains("dark-theme")) {
+          calculator.classList.remove("dark-theme");
+          calculator.style.backgroundColor = "white";
+          display.style.backgroundColor = "white";
+          display.style.color = "black";
+          buttons.forEach(button => (button.style.backgroundColor = "orange"));
+          themeToggle.classList.remove("light");
+          themeToggle.textContent = "Switch to Dark Theme";
+        } else {
+          calculator.classList.add("dark-theme");
+          calculator.style.backgroundColor = "black";
+          display.style.backgroundColor = "black";
+          display.style.color = "white";
+          buttons.forEach(button => (button.style.backgroundColor = "darkorange"));
+          themeToggle.classList.add("light");
+          themeToggle.textContent = "Switch to Light Theme";
+        }
+      }
+
+      function handleKeyboardInput(event) {
+        const key = event.key;
+        if (key >= 0 && key <= 9) {
+          appendToDisplay(key);
+        } else if (key === ".") {
+          insertPoint();
+        } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+          appendToDisplay(key.replace("/", "÷").replace("*", "x"));
+        } else if (key === "Enter" || key === "=") {
+          calculate();
+        } else if (key === "Backspace") {
+          deleteLast();
+        } else if (key === "Escape") {
+          clearDisplay();
+        }
       }
     </script>
   </head>
   <body>
-    <div
-      style="
-        border: 1px solid;
-        width: 225px;
-        background-color: black;
-        border-radius: 10px;
-      "
-    >
-      <textarea name="myText" id="textarea" cols="22" rows="1"></textarea>
-      <div style="margin: 5px">
-        <button id="bu1" class="myClass" onclick="clears()">C</button>
-        <button id="bu2" class="myClass" onclick="inputText('%')">%</button>
-        <button id="bu3" class="myClass" onclick="pi('π')">π</button>
+    <div class="calculator">
+      <input type="text" class="display" disabled />
+      <div class="buttons">
+        <button class="myClass" onclick="clearDisplay()">C</button>
+        <button class="myClass" onclick="deleteLast()">DEL</button>
+        <button class="myClass" onclick="insertPi()">π</button>
+        <button onclick="appendToDisplay('/')">÷</button>
 
-        <button id="bu4" onclick="inputText('+')">+</button>
-        <button id="bu5" class="myClass2" onclick="inputText('9')">9</button>
-        <button id="bu6" class="myClass2" onclick="inputText('8')">8</button>
-        <button id="bu7" class="myClass2" onclick="inputText('7')">7</button>
-        <button id="bu8" onclick="inputText('-')">-</button>
+        <button class="myClass2" onclick="appendToDisplay('7')">7</button>
+        <button class="myClass2" onclick="appendToDisplay('8')">8</button>
+        <button class="myClass2" onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('*')">x</button>
 
-        <button id="bu9" class="myClass2" onclick="inputText('6')">6</button>
-        <button id="bu10" class="myClass2" onclick="inputText('5')">5</button>
-        <button id="bu11" class="myClass2" onclick="inputText('4')">4</button>
-        <button id="bu12" onclick="inputText('x')">x</button>
+        <button class="myClass2" onclick="appendToDisplay('4')">4</button>
+        <button class="myClass2" onclick="appendToDisplay('5')">5</button>
+        <button class="myClass2" onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('-')">-</button>
 
-        <button id="bu13" class="myClass2" onclick="inputText('3')">3</button>
-        <button id="bu14" class="myClass2" onclick="inputText('2')">2</button>
-        <button id="bu15" class="myClass2" onclick="inputText('1')">1</button>
-        <button id="bu16" onclick="inputText('÷')">÷</button>
+        <button class="myClass2" onclick="appendToDisplay('1')">1</button>
+        <button class="myClass2" onclick="appendToDisplay('2')">2</button>
+        <button class="myClass2" onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('+')">+</button>
 
-        <button id="bu17" class="myClass2" onclick="inputText('0')">0</button>
-        <button id="bu18" class="myClass2" onclick="inputText('^')">^</button>
-        <button id="bu19" class="myClass2" onclick="point()">.</button>
-        <button id="bu20" onclick="result()">=</button>
+        <button class="myClass2" onclick="appendToDisplay('0')">0</button>
+        <button class="myClass2" onclick="appendToDisplay('%')">%</button>
+        <button class="myClass2" onclick="insertPoint()">.</button>
+        <button onclick="calculate()">=</button>
+
+        <button class="myClass2" onclick="memoryStore()">M+</button>
+        <button class="myClass2" onclick="memoryRecall()">MR</button>
+        <button class="myClass2" onclick="memoryClear()">MC</button>
+        <button class="myClass2" onclick="squareRoot()">√</button>
+        <button class="myClass2" onclick="powerOfTwo()">x²</button>
       </div>
+      <button class="theme-toggle" onclick="toggleTheme()">Switch to Dark Theme</button>
     </div>
   </body>
 </html>
