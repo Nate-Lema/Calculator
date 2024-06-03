@@ -32,5 +32,5 @@ No additional software or libraries are required.
    cd Calculator
 3. open:
    ```sh
-  open index.html
+   open index.html
    
